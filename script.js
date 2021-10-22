@@ -11,10 +11,12 @@ class Calculator {
     this.tempPrevious = ''
     this.tempOperation = ''
     this.operation = undefined
+    this.equalsWasPressed = false
   }
 
   delete() {
     this.currentOperand = this.currentOperand.toString().slice(0, -1)
+    this.equalsWasPressed = false
   }
 
   negativeNumber() {
@@ -29,11 +31,15 @@ class Calculator {
   appendNumber(number) {
     if(this.currentOperand.length > 11) return
     if (number === '.' && this.currentOperand.includes('.')) return
+    if(this.equalsWasPressed === true && this.previousOperand === '' && this.operation === undefined) {
+      this.clear()
+      this.equalsWasPressed = false
+    }
     this.currentOperand = this.currentOperand.toString() + number.toString()
   }
 
   chooseOperation(operation) {
-    if (this.operation !== undefined){
+    if (this.operation !== undefined && this.currentOperand === ''){
       this.operation = operation
     }
     if (this.currentOperand === '') return
@@ -102,6 +108,7 @@ class Calculator {
       this.tempPrevious = this.currentOperand
       this.tempOperation = this.operation
     }
+    this.equalsWasPressed = true
     this.currentOperand = parseFloat(computation.toFixed(8))
     this.operation = undefined
     this.previousOperand = ''
